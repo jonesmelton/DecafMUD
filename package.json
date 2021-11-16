@@ -1,11 +1,13 @@
 {
   "name": "decafmud",
-  "source": "web_client.html",
+  "source": "index.html",
   "scripts": {
-    "start": "parcel",
-    "build": "parcel build"
+    "start": "vite",
+    "build": "vite build",
+    "serve": "vite preview --port 8080"
   },
-  "devDependencies": {
-    "parcel": "latest"
+  "devDependencies": {},
+  "dependencies": {
+    "vite": "^2.6.14"
   }
 }
