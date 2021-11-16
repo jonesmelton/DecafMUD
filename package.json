@@ -6,8 +6,11 @@
     "build": "vite build",
     "serve": "vite preview --port 8080"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "tsc": "^2.0.3"
+  },
   "dependencies": {
+    "@vitejs/plugin-react": "^1.0.9",
     "vite": "^2.6.14"
   }
 }
