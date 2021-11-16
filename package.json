@@ -1,0 +1,11 @@
+{
+  "name": "decafmud",
+  "source": "web_client.html",
+  "scripts": {
+    "start": "parcel",
+    "build": "parcel build"
+  },
+  "devDependencies": {
+    "parcel": "latest"
+  }
+}
