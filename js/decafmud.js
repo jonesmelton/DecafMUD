@@ -1815,6 +1815,7 @@ if (!Array.prototype.filter) {
   };
 
   /** Called by the socket when data arrives. */
+  // further processing in processBuffer()
   DecafMUD.prototype.socketData = function (data) {
     // Push the text onto the inbuf.
     this.inbuf.push(data);
@@ -1873,17 +1874,23 @@ if (!Array.prototype.filter) {
 
   /** This function is a mere helper for decoding. It'll be overwritten. */
   DecafMUD.prototype.decode = function (data) {
-    return DecafMUD.plugins.Encoding[this.options.encoding].decode(data);
+    const ret = DecafMUD.plugins.Encoding[this.options.encoding].decode(data);
+    console.log("encode/decode: ", ret);
+    return ret;
   };
 
   /** This function is a mere helper for encoding. It'll be overwritten. */
   DecafMUD.prototype.encode = function (data) {
-    return DecafMUD.plugins.Encoding[this.options.encoding].encode(data);
+    const ret = DecafMUD.plugins.Encoding[this.options.encoding].encode(data);
+    // console.log("encode/decode: ", ret);
+    return ret;
   };
 
   /** Read through data, only stopping for TELNET sequences. Pass data through to
    *  the display handler. */
+
   DecafMUD.prototype.processBuffer = function () {
+    //maybe entry point
     if (!this.display) {
       return;
     }
