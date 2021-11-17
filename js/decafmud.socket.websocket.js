@@ -205,7 +205,7 @@
       rq += String.fromCharCode(u8[i]);
     }
     // Pass the data on to DecafMUD.
-    console.log("lightly parsed: ", rq);
+    // console.log("lightly parsed: ", rq);
     sock.decaf.socketData(rq);
   };
 
