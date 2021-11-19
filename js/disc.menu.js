@@ -107,7 +107,7 @@ var open_menu = -1;
 
 function close_menus() {
   for (let i = 0; i < toolbar_menus.length; i++) {
-    menuname = "sub" + toolbar_menus[i][1];
+    let menuname = "sub" + toolbar_menus[i][1];
     document.getElementById(menuname).style.visibility = "hidden";
   }
   open_menu = -1;
@@ -115,7 +115,7 @@ function close_menus() {
 }
 
 function toggle_menu(index) {
-  menuid = "sub" + toolbar_menus[index][1];
+  const menuid = "sub" + toolbar_menus[index][1];
   if (open_menu == index) {
     document.getElementById(menuid).style.visibility = "hidden";
     open_menu = -1;
