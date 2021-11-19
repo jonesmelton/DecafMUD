@@ -199,7 +199,7 @@
    * @event
    * @param {Object} event An event containing the received data.*/
   DecafWebSocket.onMessage = function (event) {
-    console.log("data from mud: ", event);
+    // console.log("data from mud: ", event);
     var sock = DecafWebSocket.sockets[this];
     var u8 = new Uint8Array(event.data);
     let rq = "";
@@ -207,6 +207,7 @@
       rq += String.fromCharCode(u8[i]);
     }
     // Pass the data on to DecafMUD.
+    // console.log("rq: ", rq);
     sock.decaf.socketData(rq);
   };
 
