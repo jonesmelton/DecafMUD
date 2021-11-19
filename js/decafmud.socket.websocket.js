@@ -153,7 +153,7 @@
    *    string consisting only of the bytes 0 to 255.
    * @throws {String} If the data cannot be written for any reason. */
   DecafWebSocket.prototype.write = function (data) {
-    console.log("being sent: , ", data);
+    // console.log("being sent to mud: , ", data);
     this.assertConnected();
     var text = new Array();
     for (var i = 0; i < data.length; i++) text[i] = data.charCodeAt(i);
@@ -206,8 +206,9 @@
     for (var i = 0; i < u8.length; i++) {
       rq += String.fromCharCode(u8[i]);
     }
+
+    this.decaf?.debugString?.("ANSI string from mud: ", rq);
     // Pass the data on to DecafMUD.
-    // console.log("rq: ", rq);
     sock.decaf.socketData(rq);
   };
 
