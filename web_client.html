@@ -26,7 +26,7 @@
       var decaf, el, timer;
 
       var srs = document.location.search;
-      srs = srs.substr(1).split("&");
+      var srs = srs.substr(1).split("&");
       var test = null;
 
       var sock = "WebSocket" in window ? "websocket" : "flash";
