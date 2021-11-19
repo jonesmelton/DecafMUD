@@ -505,7 +505,7 @@
 
     // Make the menu
     var menus = get_menus();
-    for (i = 0; i < menus.length; i += 3) {
+    for (let i = 0; i < menus.length; i += 3) {
       this.tbNew(
         menus[i],
         menus[i + 1],

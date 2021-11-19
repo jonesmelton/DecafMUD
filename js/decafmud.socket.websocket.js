@@ -202,7 +202,7 @@
     console.log("data from mud: ", event);
     var sock = DecafWebSocket.sockets[this];
     var u8 = new Uint8Array(event.data);
-    rq = "";
+    let rq = "";
     for (var i = 0; i < u8.length; i++) {
       rq += String.fromCharCode(u8[i]);
     }

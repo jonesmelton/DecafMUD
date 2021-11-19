@@ -5,7 +5,7 @@
     "strict": true,
     "outDir": "dist",
     "sourceMap": true,
-    "allowJs": true,
-    "checkJs": true
+    "allowJs": true
+    // "checkJs": true
   }
 }
