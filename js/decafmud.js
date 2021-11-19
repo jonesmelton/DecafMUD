@@ -2,7 +2,7 @@
 This can be set here, or at any time on a live console using:
 DecafMUD.prototype.debug = true;
  */
-DEBUG_MODE = true;
+const DEBUG_MODE = true;
 
 // Extend the String prototype with endsWith and substr_count.
 if (String.prototype.endsWith === undefined) {
