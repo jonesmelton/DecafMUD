@@ -106,7 +106,7 @@ function get_menus() {
 var open_menu = -1;
 
 function close_menus() {
-  for (i = 0; i < toolbar_menus.length; i++) {
+  for (let i = 0; i < toolbar_menus.length; i++) {
     menuname = "sub" + toolbar_menus[i][1];
     document.getElementById(menuname).style.visibility = "hidden";
   }
