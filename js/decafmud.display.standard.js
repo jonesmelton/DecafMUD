@@ -246,7 +246,7 @@
   Display.prototype.remove_trigger = function (word) {
     var self = this;
     var new_triggers = [];
-    for (i = 0; i < self.triggers.length; i++) {
+    for (let i = 0; i < self.triggers.length; i++) {
       if (self.triggers[i][0] !== word) {
         new_triggers.push(self.triggers[i]);
       }
@@ -283,7 +283,7 @@ essentially just leave the string alone. */
     var self = this;
     var new_data = "";
 
-    for (i = 0; i < self.triggers.length; i++) {
+    for (let i = 0; i < self.triggers.length; i++) {
       new_data = data.replace(
         new RegExp(RegExp.escape(self.triggers[i][0]), "gi"),
         '<span class="' +
