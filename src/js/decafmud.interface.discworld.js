@@ -2,7 +2,7 @@
  * @fileOverview DecafMUD User Interface: Simple
  */
 
-(function (DecafMUD) {
+function dw_interface_wrapper(DecafMUD) {
   var addEvent = function (node, etype, func) {
       if (node.addEventListener) {
         node.addEventListener(etype, func, false);
@@ -35,6 +35,7 @@
    * @param {DecafMUD} decaf The instance of DecafMUD using this plugin. */
   var SimpleInterface = function (decaf) {
     var si = this;
+    document = window.document;
 
     // Store the instance of DecafMUD.
     this.decaf = decaf;
@@ -1898,5 +1899,10 @@
   };
 
   // Expose this to DecafMUD
+  DecafMUD.plugins = {};
+  DecafMUD.plugins.Interface = {};
   DecafMUD.plugins.Interface.discworld = SimpleInterface;
-})(DecafMUD);
+  return DecafMUD.plugins.Interface.discworld.SimpleInterface;
+}
+
+export default dw_interface_wrapper;

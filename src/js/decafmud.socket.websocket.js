@@ -207,7 +207,7 @@
       rq += String.fromCharCode(u8[i]);
     }
 
-    this.decaf?.debugString?.("ANSI string from mud: ", rq);
+    console.log("ANSI string from mud: ", rq);
     // Pass the data on to DecafMUD.
     sock.decaf.socketData(rq);
   };

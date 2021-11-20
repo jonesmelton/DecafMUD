@@ -1,3 +1,5 @@
+import dw_interface_wrapper from "./decafmud.interface.discworld";
+
 /** This is the main dev-level debug flag.
 This can be set here, or at any time on a live console using:
 DecafMUD.prototype.debug = true;
@@ -75,7 +77,7 @@ if (!Array.prototype.filter) {
 }
 
 // The obligatory, oh-so-popular wrapper function
-(function (window) {
+function DecafMudWrapper(window, options) {
   // Create a function for extending Objects
   var extend_obj = function (base, obj) {
     for (var key in obj) {
@@ -117,9 +119,23 @@ if (!Array.prototype.filter) {
    * @property {number} id The id of the DecafMUD instance.
    * @param {Object} options Configuration settings for setting up DecafMUD.
    */
-  var DecafMUD = function DecafMUD(options) {
+  var DecafMUD = function DecafMUD() {
     // Store the options for later.
-    this.options = {};
+    this.options = {
+      set_interface: {
+        container: window.document.querySelector("#mud"),
+        start_full: full,
+      },
+      set_socket: {
+        wspath: "discworld.atuin.net",
+        wsport: 4243,
+      },
+      host: address,
+      port: 4242,
+      autoreconnect: false,
+      socket: "websocket",
+      plugins: ["telopt.zmp"],
+    };
     extend_obj(this.options, DecafMUD.options);
 
     if (options !== undefined) {
@@ -1503,32 +1519,42 @@ if (!Array.prototype.filter) {
    *  create a new instance of the user interface and tell it to show a basic
    *  splash. Then, we start loading the other plugins.
    */
+  let ui;
   DecafMUD.prototype.initSplash = function () {
+    // console.log("this: ", this);
     // Create the UI if we're using one. Which we always should be.
-    if (this.options.interface !== undefined) {
-      this.debugString(
-        'Attempting to initialize the interface plugin "{0}".'.tr(
-          this.options.interface
-        )
+    console.log("plugins: ", DecafMUD.plugins);
+    try {
+      // console.log(
+      //   'Attempting to initialize the interface plugin "{0}".'.tr(
+      //     options.interface
+      //   )
+      // );
+      ui = dw_interface_wrapper(this);
+
+      ui?.initSplash();
+    } catch (error) {
+      console.info(
+        "something failed that might need access to a real DOM",
+        error
       );
-      this.ui = new DecafMUD.plugins.Interface[this.options.interface](this);
-      this.ui.initSplash();
+    } finally {
+      ("nothing");
     }
-
-    // Set the number of extra steps predicted after this step of loading for
-    // the sake of updating the progress bar.
-    this.extra = 3;
-
-    // Require plugins for: storage, socket, encoding, triggers, telopt
-    this.require("decafmud.socket." + this.options.socket);
-    this.require("decafmud.encoding." + this.options.encoding);
-
-    // Load them. This is the total number of required things thus far.
-    if (this.ui && this.need.length > 0) {
-      this.updateSplash(null, this.need[0][0], 0);
-    }
-    this.waitLoad(this.initSocket, this.updateSplash);
   };
+  // Set the number of extra steps predicted after this step of loading for
+  // the sake of updating the progress bar.
+  let extra = 3;
+
+  // Require plugins for: storage, socket, encoding, triggers, telopt
+  // DecafMUD.require("decafmud.socket.websocket");
+  // DecafMUD.require("decafmud.encoding." + options.encoding);
+
+  // Load them. This is the total number of required things thus far.
+  if (ui && this.need.length > 0) {
+    this.updateSplash(null, this.need[0][0], 0);
+  }
+  // this.waitLoad(this.initSocket, this.updateSplash);
 
   /** Update the splash screen as we load. */
   DecafMUD.prototype.updateSplash = function (module, next_mod, perc) {
@@ -1542,8 +1568,8 @@ if (!Array.prototype.filter) {
         100,
         Math.floor(
           100 *
-            ((this.extra + this.required - this.need.length) /
-              (this.required + this.extra))
+            ((extra + this.required - this.need.length) /
+              (this.required + extra))
         )
       );
     }
@@ -1566,7 +1592,7 @@ if (!Array.prototype.filter) {
 
   /** The second step of initialization. */
   DecafMUD.prototype.initSocket = function () {
-    this.extra = 1;
+    extra = 1;
     // Create the master storage object.
     this.store = new DecafMUD.plugins.Storage["standard"](this);
     this.storage = this.store;
@@ -2228,7 +2254,7 @@ if (!Array.prototype.filter) {
         "Type commands here, or use the Up and Down arrows to browse your recently used commands.",
     },
 
-    // Telnet Settings
+    // Telnet Settingsa
     ttypes: ["xterm-256color"],
     environ: {},
     encoding_order: ["utf8"],
@@ -2239,4 +2265,6 @@ if (!Array.prototype.filter) {
 
   // Expose DecafMUD to the outside world
   window.DecafMUD = DecafMUD;
-})(window);
+  return DecafMUD;
+}
+export default DecafMudWrapper;
