@@ -1,0 +1,11 @@
+{
+  "name": "DecafMUD",
+  "version": "1.0.0",
+  "main": "src/web_client.html",
+  "repository": "https://github.com/jonesmelton/DecafMUD.git",
+  "author": "Jones Melton <shavah@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "typescript": "^4.5.2"
+  }
+}
