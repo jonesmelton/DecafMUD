@@ -7,11 +7,11 @@ var fkeymacros = true;
 var numpadwalking = true;
 
 var showprogressbars = false;
-var showmap = 0;  // don't show until something is sent
+var showmap = 0; // don't show until something is sent
 
 function set_fontsize(k) {
   fontpercentage = k;
-  decaf.ui.el_display.style.fontSize = (k*110/100) + "%";
+  decaf.ui.el_display.style.fontSize = (k * 110) / 100 + "%";
 }
 
 function get_fontsize() {
@@ -47,19 +47,18 @@ function toggle_progressbars(value) {
   if (value) {
     decaf.ui.showSidebar();
     decaf.ui.showProgressBars();
-  }
-  else {
+  } else {
     decaf.ui.hideProgressBars();
     if (showmap != 1) decaf.ui.hideSidebar();
   }
 }
 
 function toggle_map(value) {
-  if (value) showmap = 1; // show it
+  if (value) showmap = 1;
+  // show it
   else showmap = -1; // never show it
   if (value) decaf.ui.showMap();
   else decaf.ui.hideMap();
   if (!value && !showprogressbars) decaf.ui.hideSidebar();
   else decaf.ui.showSidebar();
 }
-
