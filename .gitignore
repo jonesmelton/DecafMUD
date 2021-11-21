@@ -1,6 +1,7 @@
 # do not need to include the Google Closure compiler JAR
 closure*.jar
-
+node_modules/
+dist/
 # do not included the compiled code
 compiled/
 
