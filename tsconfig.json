@@ -1,10 +1,10 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "module": "commonjs",
-    "strict": true,
-    "outDir": "dist",
-    // "sourceMap": true
+    "module": "amd",
+    // "strict": true,
+    "outDir": "dist/js",
+    "sourceMap": true,
     "allowJs": true
     // "checkJs": true
   }

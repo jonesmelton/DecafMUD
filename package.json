@@ -5,6 +5,9 @@
   "repository": "https://github.com/jonesmelton/DecafMUD.git",
   "author": "Jones Melton <shavah@gmail.com>",
   "license": "MIT",
+  "scripts": {
+    "build": "./make.sh"
+  },
   "dependencies": {
     "typescript": "^4.5.2"
   },
