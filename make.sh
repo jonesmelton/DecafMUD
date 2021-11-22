@@ -1,6 +1,7 @@
 #! /bin/bash
 set -e
 
+echo "deleting dist/"
 rm -rf dist/
 
 yarn tsc
