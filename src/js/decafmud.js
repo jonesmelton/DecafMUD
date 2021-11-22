@@ -118,6 +118,7 @@ if (!Array.prototype.filter) {
    */
   var DecafMUD = function DecafMUD(options) {
     // Store the options for later.
+    this.pipe = options.pipe;
     this.options = {};
     extend_obj(this.options, DecafMUD.options);
 
@@ -142,6 +143,7 @@ if (!Array.prototype.filter) {
 
     // Store this instance for easy retrieval.
     DecafMUD.instances.push(this);
+    console.log("instances: ", DecafMUD.instances);
 
     // Start doing debug stuff.
     this.debugString("Created new instance.", "info");

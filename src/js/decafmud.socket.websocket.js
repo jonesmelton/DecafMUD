@@ -204,6 +204,7 @@
     for (var i = 0; i < u8.length; i++) {
       rq += String.fromCharCode(u8[i]);
     }
+    sock.decaf.pipe.mudSent(rq);
     // Pass the data on to DecafMUD.
     sock.decaf.socketData(rq);
   };
