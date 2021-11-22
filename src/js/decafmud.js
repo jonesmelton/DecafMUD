@@ -118,7 +118,7 @@ if (!Array.prototype.filter) {
    */
   var DecafMUD = function DecafMUD(options) {
     // Store the options for later.
-    this.pipe = options.pipe;
+    this.pipe = new options.pipe(this);
     this.options = {};
     extend_obj(this.options, DecafMUD.options);
 
@@ -1726,6 +1726,7 @@ if (!Array.prototype.filter) {
     this.connect_try = 0;
     clearTimeout(this.conn_timer);
 
+    this.pipe.setSocket(this.socket);
     // Get the host and stuff.
     var host = this.socket.host,
       port = this.socket.port;
