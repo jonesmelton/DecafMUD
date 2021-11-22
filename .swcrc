@@ -1,0 +1,16 @@
+{
+  "env": {
+    "targets": {
+      "chrome": "58",
+      "ie": "11"
+    }
+  },
+  "jsc": {
+    "parser": {
+      "syntax": "typescript",
+      "tsx": false,
+      "decorators": false,
+      "dynamicImport": false
+    }
+  }
+}
