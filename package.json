@@ -6,12 +6,16 @@
   "author": "Jones Melton <shavah@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "build": "./make.sh"
+    "build": "rm -rf dist && swc src -d dist --copy-files",
+    "watch": "swc src -d dist --copy-files --watch"
   },
   "dependencies": {
     "typescript": "^4.5.2"
   },
   "devDependencies": {
+    "@swc/cli": "^0.1.51",
+    "@swc/core": "^1.2.111",
+    "chokidar": "^3.5.2",
     "prettier": "^2.4.1"
   }
 }
