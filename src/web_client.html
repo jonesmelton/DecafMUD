@@ -26,59 +26,28 @@
     <script type="text/javascript">
       var decaf, el, timer;
 
-      var srs = document.location.search;
-      srs = srs.substr(1).split("&");
-      var test = null;
-
-      var sock = "WebSocket" in window ? "websocket" : "flash";
-      var path = "menu";
-      var full = true;
-      var address = "discworld.starturtle.net";
-
-      for (var si in srs) {
-        var sr = srs[si];
-        if (typeof sr !== "string") {
-          continue;
-        }
-        if (sr.toLowerCase() === "fullscreen") {
-          full = true;
-        } else if (
-          sr.toLowerCase().substr(0, 7) === "socket=" &&
-          sr.length > 7
-        ) {
-          sock = sr.substr(7);
-        } else if (sr.toLowerCase().substr(0, 5) === "test=" && sr.length > 5) {
-          test = sr.substr(5);
-        } else if (sr.toLowerCase().substr(0, 5) === "path=" && sr.length > 5) {
-          path = sr.substr(5);
-        }
-        if (sr == "ipv4") {
-          address = "82.68.167.69";
-        }
-        if (sr == "ipv6") {
-          address = "2a01:348:19e:2::2";
-        }
-      }
-
       window.onload = function () {
+        const address = "discworld.starturtle.net";
         // Get an element for display
-        var my_element = document.querySelector("#mud");
-        el = document.querySelector("#test-results");
+        // var my_element = document.querySelector("#mud");
+        const decafmud_dom_element = document.createElement("div");
+        decafmud_dom_element.id = "mud";
+        // el = document.querySelector("#test-results");
 
         var options = {
           pipe: MudPipe,
           set_interface: {
-            container: my_element,
-            start_full: full,
+            container: decafmud_dom_element,
+            start_full: true,
           },
           set_socket: {
-            wspath: path,
+            wspath: "menu",
             wsport: 4243,
           },
           host: address,
           port: 4242,
           autoreconnect: false,
-          socket: sock,
+          socket: "websocket",
           plugins: ["telopt.zmp"],
         };
 
