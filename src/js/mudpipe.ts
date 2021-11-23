@@ -11,6 +11,11 @@ class MudPipe {
     this.mud = decafMud;
   }
 
+  setMud(mud: DecafMud) {
+    this.mud = mud;
+    return this;
+  }
+
   setSocket(socket) {
     this.socket = socket;
   }
