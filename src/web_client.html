@@ -26,18 +26,28 @@
     ></script>
     <script src="js/decafmud.encoding.cp437.js" type="text/javascript"></script>
     <script src="main.js"></script>
+  </head>
+  <body>
+    <div id="elm_mud"></div>
+    ;
+
     <script type="text/javascript">
       var decaf, el, timer;
 
       window.onload = function () {
         const address = "discworld.starturtle.net";
-        // Get an element for display
-        // var my_element = document.querySelector("#mud");
+
+        // dummy div for the old client
         const decafmud_dom_element = document.createElement("div");
         decafmud_dom_element.id = "mud";
-        // el = document.querySelector("#test-results");
 
+        // real div for the new client
+        var app = Elm.Main.init({
+          node: document.getElementById("elm_mud"),
+        });
         var MP = new MudPipe();
+        MP.setPorts(app.ports);
+        console.log("app?: ", app);
         var options = {
           pipe: MP,
           set_interface: {
@@ -69,14 +79,8 @@
           return;
         }
       }
-    </script>
-  </head>
-  <body>
-    <div id="elm_mud"></div>
-    <script>
-      var app = Elm.Main.init({
-        node: document.getElementById("elm_mud"),
-      });
+
+      // console.log("in body: ", MP);
     </script>
   </body>
 </html>

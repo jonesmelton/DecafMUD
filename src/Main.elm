@@ -1,4 +1,4 @@
-module Main exposing (..)
+port module Main exposing (..)
 
 -- Press buttons to increment and decrement a counter.
 --
@@ -19,7 +19,8 @@ import Html.Events exposing (onClick)
 main =
   Browser.sandbox { init = init, update = update, view = view }
 
-
+port sendToMud : String -> Cmd msg
+port sendToElm : (String -> msg) -> Sub msg
 
 -- MODEL
 
