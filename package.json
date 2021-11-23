@@ -1,7 +1,6 @@
 {
   "name": "DecafMUD",
   "version": "1.0.0",
-  "main": "src/web_client.html",
   "repository": "https://github.com/jonesmelton/DecafMUD.git",
   "author": "Jones Melton <shavah@gmail.com>",
   "license": "MIT",
@@ -9,9 +8,6 @@
     "build": "rm -rf dist && swc src -d dist --copy-files",
     "watch": "swc src -d dist --copy-files --watch"
   },
-  "browserslist": [
-    "default"
-  ],
   "dependencies": {
     "typescript": "^4.5.2"
   },

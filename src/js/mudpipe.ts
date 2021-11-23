@@ -1,3 +1,5 @@
+// const ansicolor = require("ansicolor");
+
 type DecafMud = {
   sendInput?: Function;
 };
