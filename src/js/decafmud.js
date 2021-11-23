@@ -76,31 +76,6 @@ if (!Array.prototype.filter) {
 // The obligatory, oh-so-popular wrapper function
 (function (window) {
   // Create a function for extending Objects
-  var extend_obj = function (base, obj) {
-    for (var key in obj) {
-      var o = obj[key];
-      if (typeof o === "object" && !("nodeType" in o)) {
-        if (o.push !== undefined) {
-          if (base[key] === undefined) {
-            base[key] = [];
-          }
-          for (var i = 0; i < o.length; i++) {
-            base[key].push(o[i]);
-          }
-        } else {
-          if (base[key] === undefined) {
-            base[key] = {};
-          }
-          if (typeof base[key] === "object") {
-            extend_obj(base[key], o);
-          }
-        }
-      } else {
-        base[key] = o;
-      }
-    }
-    return base;
-  };
 
   /**
    * Create a new instance of the DecafMUD client.
@@ -118,20 +93,20 @@ if (!Array.prototype.filter) {
    */
   var DecafMUD = function DecafMUD(options) {
     // Store the options for later.
-    this.pipe = new options.pipe(this);
+    this.pipe = options.pipe.setMud(this);
     this.options = {};
-    extend_obj(this.options, DecafMUD.options);
+    Object.assign(this.options, DecafMUD.options);
 
     if (options !== undefined) {
       if (typeof options !== "object") {
         throw "The DecafMUD options argument must be an object!";
       }
-      extend_obj(this.options, options);
+      Object.assign(this.options, options);
     }
 
     // Store the settings for later.
     this.settings = {};
-    extend_obj(this.settings, DecafMUD.settings);
+    Object.assign(this.settings, DecafMUD.settings);
 
     // Set up the objects that'd be shared.
     this.need = [];
