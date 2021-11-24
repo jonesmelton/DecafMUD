@@ -45,8 +45,10 @@
         var app = Elm.Main.init({
           node: document.getElementById("elm_mud"),
         });
+
         var MP = new MudPipe();
         MP.setPorts(app.ports);
+
         console.log("app?: ", app);
         var options = {
           pipe: MP,

@@ -19,7 +19,7 @@ import Html.Events exposing (onClick)
 main =
   Browser.sandbox { init = init, update = update, view = view }
 
-port sendToMud : String -> Cmd msg
+-- port sendToMud : String -> Cmd msg
 port sendToElm : (String -> msg) -> Sub msg
 
 -- MODEL
