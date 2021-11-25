@@ -6,7 +6,7 @@ type DecafMud = {
 type DecafSocket = {};
 type ElmPorts = {
   sendToMud: any;
-  sendToElm(line: string): void;
+  sendToElm: any;
 };
 class MudPipe {
   mud: DecafMud;
@@ -33,7 +33,7 @@ class MudPipe {
 
   mudSent(data: string) {
     try {
-      this.ports?.sendToElm?.(data);
+      this.ports?.sendToElm?.send(data);
     } catch (error) {
       console.log(error);
     }
