@@ -1,6 +1,7 @@
 port module Main exposing (..)
 
-import Ansi
+import Ansi exposing (Action(..), parse)
+import Ansi.Log as AnsiL
 import Browser
 import Html exposing (..)
 import Html.Attributes exposing (..)
@@ -38,7 +39,7 @@ port sendToElm : (String -> msg) -> Sub msg
 
 type alias Model =
     { draft : String
-    , messages : List String
+    , inputHistory : List String
     , mudlines : List Ansi.Action
     }
 
@@ -46,7 +47,7 @@ type alias Model =
 init : () -> ( Model, Cmd Msg )
 init flags =
     ( { draft = ""
-      , messages = []
+      , inputHistory = []
       , mudlines = []
       }
     , Cmd.none
@@ -85,13 +86,13 @@ update msg model =
             )
 
         Recv message ->
-            ( { model | messages = model.messages ++ [ message ] }
+            ( { model | inputHistory = model.inputHistory ++ [ message ] }
             , Cmd.none
             )
 
         Mudline line ->
             Debug.log "elm logging"
-                ( { model | mudlines = Ansi.parse line ++ model.mudlines }
+                ( { model | mudlines = parse line ++ model.mudlines }
                 , Cmd.none
                 )
 
@@ -106,7 +107,23 @@ subscriptions _ =
 
 
 
--- VIEW
+-- type Action
+--     = Action String
+--     | Print String
+--     | Anything
+-- toString : Username -> String
+-- toString (Username username) =
+--     username
+
+
+actionToString : Action -> String
+actionToString action =
+    case action of
+        Print string ->
+            string
+
+        _ ->
+            ""
 
 
 view : Model -> Html Msg
@@ -114,7 +131,7 @@ view model =
     div []
         [ h1 [] [ text "Echo Chat" ]
         , ul []
-            (List.map (\msg -> li [] [ text msg ]) model.messages)
+            (List.map (\msg -> li [] [ text (actionToString msg) ]) model.mudlines)
         , input
             [ type_ "text"
             , placeholder "Draft"
