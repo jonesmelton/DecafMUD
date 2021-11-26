@@ -41,6 +41,7 @@ type alias Model =
     { draft : String
     , inputHistory : List String
     , mudlines : List Ansi.Action
+    , ansiModel : AnsiL.Model
     }
 
 
@@ -49,6 +50,7 @@ init flags =
     ( { draft = ""
       , inputHistory = []
       , mudlines = []
+      , ansiModel = AnsiL.init AnsiL.Cooked
       }
     , Cmd.none
     )
@@ -92,7 +94,10 @@ update msg model =
 
         Mudline line ->
             -- Debug.log "elm logging"
-            ( { model | mudlines = parse line ++ model.mudlines }
+            ( { model
+                | mudlines = parse line ++ model.mudlines
+                , ansiModel = AnsiL.update line model.ansiModel
+              }
             , Cmd.none
             )
 
@@ -130,8 +135,7 @@ view : Model -> Html Msg
 view model =
     div []
         [ h1 [] [ text "Echo Chat" ]
-        , ul []
-            (List.map (\msg -> li [] [ text (actionToString msg) ]) model.mudlines)
+        , AnsiL.view model.ansiModel
         , input
             [ type_ "text"
             , placeholder "Draft"
