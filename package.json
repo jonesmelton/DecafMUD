@@ -7,9 +7,10 @@
   "scripts": {
     "build": "rm -rf dist && swc src -d dist --copy-files",
     "elmb": "elm make src/Main.elm --output=dist/main.js --debug",
-    "watch": "swc src -d dist --copy-files --watch"
+    "css": "tailwindcss -o dist/tailwind.css"
   },
   "dependencies": {
+    "tailwindcss": "^2.2.19",
     "typescript": "^4.5.2"
   },
   "devDependencies": {

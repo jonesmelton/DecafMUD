@@ -133,7 +133,7 @@ actionToString action =
 
 view : Model -> Html Msg
 view model =
-    div []
+    div [ class "container mx-auto bg-red-500" ]
         [ h1 [] [ text "Echo Chat" ]
         , AnsiL.view model.ansiModel
         , input
