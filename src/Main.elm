@@ -111,30 +111,10 @@ subscriptions _ =
     sendToElm Mudline
 
 
-
--- type Action
---     = Action String
---     | Print String
---     | Anything
--- toString : Username -> String
--- toString (Username username) =
---     username
-
-
-actionToString : Action -> String
-actionToString action =
-    case action of
-        Print string ->
-            string
-
-        _ ->
-            ""
-
-
 view : Model -> Html Msg
 view model =
-    div [ class "container mx-auto bg-red-500" ]
-        [ h1 [] [ text "Echo Chat" ]
+    div [ class "container mx-auto w-full h-full" ]
+        [ h1 [ class "connect-title" ] [ text "Echo Chat" ]
         , AnsiL.view model.ansiModel
         , input
             [ type_ "text"
