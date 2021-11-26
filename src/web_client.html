@@ -47,6 +47,7 @@
         });
 
         var MP = new MudPipe();
+        window.elmToMud = app.ports.sendToMud;
         MP.setPorts(app.ports);
 
         console.log("app?: ", app);

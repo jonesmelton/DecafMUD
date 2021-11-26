@@ -93,7 +93,6 @@ if (!Array.prototype.filter) {
    */
   var DecafMUD = function DecafMUD(options) {
     // Store the options for later.
-    this.pipe = options.pipe.setMud(this);
     this.options = {};
     Object.assign(this.options, DecafMUD.options);
 
@@ -133,6 +132,7 @@ if (!Array.prototype.filter) {
     // Load those. After that, chain to the initSplash function.
     this.waitLoad(this.initSplash);
 
+    this.pipe = options.pipe.setMud(this);
     return this;
   };
 

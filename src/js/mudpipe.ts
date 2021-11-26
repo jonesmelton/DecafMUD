@@ -18,7 +18,16 @@ class MudPipe {
   }
   setPorts(ports: ElmPorts): MudPipe {
     this.ports = ports;
-    // this.ports.sendToMud.subscribe(this.sendMud);
+
+    return this;
+  }
+
+  subscribeToElm() {
+    try {
+      this.ports.sendToMud.subscribe(this.sendMud);
+    } catch (error) {
+      console.log(error);
+    }
     return this;
   }
 

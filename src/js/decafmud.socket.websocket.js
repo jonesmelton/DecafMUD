@@ -167,7 +167,7 @@
    * @event */
   DecafWebSocket.onOpen = function () {
     var sock = DecafWebSocket.sockets[this];
-
+    window.elmToMud.subscribe((msg) => sock.write(msg + "\r\n"));
     // Are we connected?
     if (this.readyState === 1) {
       sock.connected = true;

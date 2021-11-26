@@ -27,7 +27,7 @@ main =
 -- PORTS
 
 
-port sendMessage : String -> Cmd msg
+port sendToMud : String -> Cmd msg
 
 
 port sendToElm : (String -> msg) -> Sub msg
@@ -82,7 +82,7 @@ update msg model =
 
         Send ->
             ( { model | draft = "" }
-            , sendMessage model.draft
+            , sendToMud model.draft
             )
 
         Recv message ->
@@ -91,10 +91,10 @@ update msg model =
             )
 
         Mudline line ->
-            Debug.log "elm logging"
-                ( { model | mudlines = parse line ++ model.mudlines }
-                , Cmd.none
-                )
+            -- Debug.log "elm logging"
+            ( { model | mudlines = parse line ++ model.mudlines }
+            , Cmd.none
+            )
 
 
 
