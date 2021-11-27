@@ -46,7 +46,7 @@ class MudPipe {
     } catch (error) {
       console.log(error);
     }
-    console.log("fresh from the mud: ", data);
+    // console.log("fresh from the mud: ", data);
   }
   sendMud(input: string) {
     try {
