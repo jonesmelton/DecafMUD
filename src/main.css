@@ -2,6 +2,102 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
-.connect-title {
+.ansi-bold {
+  @apply font-bold;
+}
+.ansi-black-fg {
+  @apply text-gray-900;
+}
+.ansi-red-fg {
+  @apply text-red-300;
+}
+.ansi-green-fg {
+  @apply text-green-300;
+}
+.ansi-yellow-fg {
+  @apply text-yellow-300;
+}
+.ansi-blue-fg {
+  @apply text-blue-300;
+}
+.ansi-magenta-fg {
+  @apply text-pink-300;
+}
+.ansi-cyan-fg {
+  @apply text-cyan-300;
+}
+.ansi-white-fg {
+  @apply text-gray-50;
+}
+.ansi-bright-black-fg {
+  @apply text-gray-500;
+}
+.ansi-bright-red-fg {
+  @apply text-red-500;
+}
+.ansi-bright-green-fg {
+  @apply text-green-500;
+}
+.ansi-bright-yellow-fg {
+  @apply text-yellow-500;
+}
+.ansi-bright-blue-fg {
+  @apply text-blue-500;
+}
+.ansi-bright-magenta-fg {
+  @apply text-magenta-500;
+}
+.ansi-bright-cyan-fg {
+  @apply text-cyan-500;
+}
+.ansi-bright-white-fg {
+  @apply text-gray-50;
+}
+.ansi-black-bg {
+  @apply text-gray-900;
+}
+.ansi-red-bg {
+  @apply bg-red-800;
+}
+.ansi-green-bg {
+  @apply bg-green-700;
+}
+.ansi-yellow-bg {
+  @apply bg-yellow-700;
+}
+.ansi-blue-bg {
+  @apply bg-blue-700;
+}
+.ansi-magenta-bg {
+  @apply bg-magenta-700;
+}
+.ansi-cyan-bg {
+  @apply bg-cyan-700;
+}
+.ansi-white-bg {
+  @apply bg-gray-300;
+}
+.ansi-bright-black-bg {
+  @apply bg-gray-500;
+}
+.ansi-bright-red-bg {
+  @apply bg-red-500;
+}
+.ansi-bright-green-bg {
+  @apply bg-green-500;
+}
+.ansi-bright-yellow-bg {
+  @apply bg-yellow-500;
+}
+.ansi-bright-blue-bg {
   @apply bg-blue-500;
+}
+.ansi-bright-magenta-bg {
+  @apply bg-magenta-500;
+}
+.ansi-bright-cyan-bg {
+  @apply bg-cyan-500;
+}
+.ansi-bright-white-bg {
+  @apply bg-gray-200;
 }

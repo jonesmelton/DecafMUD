@@ -117,7 +117,7 @@ subscriptions _ =
 view : Model -> Html Msg
 view model =
     div
-        [ class "container mx-auto w-full h-full bg-gray-900 overscroll-y-auto", id "mud-content" ]
+        [ class "container mx-auto w-full h-full bg-gray-900 pl-2", id "mud-content" ]
         [ h1 [ class "connect-title" ] [ text "Echo Chat" ]
         , div [ class "text-gray-50" ] [ AnsiL.view model.ansiModel ]
         , input
@@ -126,6 +126,7 @@ view model =
             , onInput DraftChanged
             , on "keydown" (ifIsEnter Send)
             , value model.draft
+            , class "-ml-2"
             ]
             []
         , button [ onClick Send ] [ text "Send" ]
