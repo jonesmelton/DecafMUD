@@ -2,6 +2,7 @@ port module Main exposing (..)
 
 import Ansi exposing (Action(..), parse)
 import Ansi.Log as AnsiL
+import Array exposing (Array)
 import Browser
 import Html exposing (..)
 import Html.Attributes exposing (..)
@@ -70,10 +71,6 @@ type Msg
     | NoOp
 
 
-scrollToBottom =
-    Task.attempt (\_ -> NoOp) <| scrollY "mud-content" 1 1
-
-
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
@@ -96,13 +93,42 @@ update msg model =
             -- Debug.log "elm logging"
             ( { model
                 | mudlines = parse line ++ model.mudlines
-                , ansiModel = AnsiL.update line model.ansiModel
+                , ansiModel = AnsiL.update (stringIfNotOOB line) model.ansiModel
               }
             , scrollToBottom
             )
 
         NoOp ->
             ( model, Cmd.none )
+
+
+unwrapPrint : Action -> String
+unwrapPrint action =
+    case action of
+        Print value ->
+            value
+
+        _ ->
+            ""
+
+
+isOOB : String -> Bool
+isOOB line =
+    let
+        data =
+            List.map unwrapPrint (parse line)
+    in
+    String.contains "ÿ" (String.join "" data)
+
+
+stringIfNotOOB : String -> String
+stringIfNotOOB mudline =
+    case isOOB mudline of
+        True ->
+            ""
+
+        False ->
+            mudline
 
 
 
@@ -117,9 +143,9 @@ subscriptions _ =
 view : Model -> Html Msg
 view model =
     div
-        [ class "container mx-auto w-full h-full bg-gray-900 pl-2", id "mud-content" ]
+        [ class "container mx-auto bg-gray-900 pl-2", id "mud-content" ]
         [ h1 [ class "connect-title" ] [ text "Echo Chat" ]
-        , div [ class "text-gray-50" ] [ AnsiL.view model.ansiModel ]
+        , div [ class "text-gray-50 break-words" ] [ AnsiL.view model.ansiModel ]
         , input
             [ type_ "text"
             , placeholder "Draft"
@@ -148,3 +174,12 @@ ifIsEnter msg =
                 else
                     D.fail "some other key"
             )
+
+
+
+-- task bc it has dom side effects that could fail
+-- pipes whatever scrolly returns into a lil black hole lambda?
+
+
+scrollToBottom =
+    Task.attempt (\_ -> NoOp) <| scrollY "mud-content" 1 1
