@@ -7,6 +7,8 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import Json.Decode as D
+import Scroll exposing (scrollY)
+import Task
 
 
 
@@ -62,16 +64,14 @@ init flags =
 
 type Msg
     = DraftChanged String
-    | Send
     | Recv String
     | Mudline String
+    | Send
+    | NoOp
 
 
-
--- Use the `sendMessage` port when someone presses ENTER or clicks
--- the "Send" button. Check out index.html to see the corresponding
--- JS where this is piped into a WebSocket.
---
+scrollToBottom =
+    Task.attempt (\_ -> NoOp) <| scrollY "mud-content" 1 1
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -98,8 +98,11 @@ update msg model =
                 | mudlines = parse line ++ model.mudlines
                 , ansiModel = AnsiL.update line model.ansiModel
               }
-            , Cmd.none
+            , scrollToBottom
             )
+
+        NoOp ->
+            ( model, Cmd.none )
 
 
 
@@ -113,9 +116,10 @@ subscriptions _ =
 
 view : Model -> Html Msg
 view model =
-    div [ class "container mx-auto w-full h-full" ]
+    div
+        [ class "container mx-auto w-full h-full bg-gray-900 overscroll-y-auto", id "mud-content" ]
         [ h1 [ class "connect-title" ] [ text "Echo Chat" ]
-        , AnsiL.view model.ansiModel
+        , div [ class "text-gray-50" ] [ AnsiL.view model.ansiModel ]
         , input
             [ type_ "text"
             , placeholder "Draft"
