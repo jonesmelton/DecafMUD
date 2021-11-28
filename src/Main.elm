@@ -4,6 +4,7 @@ import Ansi exposing (Action(..), parse)
 import Ansi.Log as AnsiL
 import Array exposing (Array)
 import Browser
+import Browser.Dom as Dom
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
@@ -57,7 +58,7 @@ init flags =
       , mudlines = []
       , ansiModel = AnsiL.init AnsiL.Cooked
       }
-    , Cmd.none
+    , focusInputBox
     )
 
 
@@ -173,6 +174,7 @@ inputView model =
     div [ class "fixed inset-x-0 bottom-0 h-10 bg-blue-100 p-2" ]
         [ input
             [ type_ "text"
+            , id "mud-input"
             , placeholder "Draft"
             , onInput DraftChanged
             , on "keydown" (ifIsEnter Send)
@@ -195,8 +197,7 @@ view model =
     in
     div
         [ class mudContainerClasses, id "mud-content" ]
-        [ h1 [ class "connect-title" ] [ text "Echo Chat" ]
-        , statsView "testytest"
+        [ statsView "testytest"
         , div [ class "text-gray-50 break-words" ] [ AnsiL.view viewModel ]
         , inputView model
         ]
@@ -226,3 +227,8 @@ ifIsEnter msg =
 
 scrollToBottom =
     Task.attempt (\_ -> NoOp) <| scrollY "mud-content" 1 1
+
+
+focusInputBox : Cmd Msg
+focusInputBox =
+    Task.attempt (\_ -> NoOp) (Dom.focus "mud-input")
