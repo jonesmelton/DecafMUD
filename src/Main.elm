@@ -13,6 +13,8 @@ import Task
 
 
 
+-- ÿ = IAC
+-- ý = DO
 -- MAIN
 
 
@@ -112,6 +114,16 @@ unwrapPrint action =
             ""
 
 
+lineToString : AnsiL.Line -> String
+lineToString line =
+    let
+        ( chunks, _ ) =
+            line
+    in
+    List.map (\chunk -> chunk.text) chunks
+        |> String.join ""
+
+
 isOOB : String -> Bool
 isOOB line =
     let
@@ -140,12 +152,22 @@ subscriptions _ =
     sendToElm Mudline
 
 
+playerView : AnsiL.Model -> AnsiL.Model
+playerView model =
+    { model | lines = Array.filter (\line -> not <| String.contains "ÿ" (lineToString line)) model.lines }
+
+
 view : Model -> Html Msg
 view model =
+    let
+        viewModel =
+            playerView model.ansiModel
+    in
     div
         [ class "container mx-auto bg-gray-900 pl-2", id "mud-content" ]
         [ h1 [ class "connect-title" ] [ text "Echo Chat" ]
-        , div [ class "text-gray-50 break-words" ] [ AnsiL.view model.ansiModel ]
+        , div [ class "debug" ] []
+        , div [ class "text-gray-50 break-words" ] [ AnsiL.view viewModel ]
         , input
             [ type_ "text"
             , placeholder "Draft"
