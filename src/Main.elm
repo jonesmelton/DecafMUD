@@ -31,6 +31,7 @@ main =
 
 
 -- PORTS
+-- connection out to JS
 
 
 port sendToMud : String -> Cmd msg
@@ -68,7 +69,6 @@ init flags =
 
 type Msg
     = DraftChanged String
-    | Recv String
     | Mudline String
     | Send
     | NoOp
@@ -83,13 +83,11 @@ update msg model =
             )
 
         Send ->
-            ( { model | draft = "" }
+            ( { model
+                | draft = ""
+                , inputHistory = model.draft :: model.inputHistory
+              }
             , sendToMud model.draft
-            )
-
-        Recv message ->
-            ( { model | inputHistory = model.inputHistory ++ [ message ] }
-            , Cmd.none
             )
 
         Mudline line ->
@@ -103,6 +101,10 @@ update msg model =
 
         NoOp ->
             ( model, Cmd.none )
+
+
+
+-- two different ways to unpack and search text from the mud
 
 
 unwrapPrint : Action -> String
