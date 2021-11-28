@@ -26,6 +26,15 @@ import Task
 -- 
 strip =
     """
+    255 250 70
+255 250 24 1 255 240
+255 251 201
+255 253 39
+255 251 93
+255 251 70
+255 253 91
+255 253 31
+255 253 24
 ÿð
 ÿúF
 ÿúÿð
@@ -115,6 +124,9 @@ update msg model =
             let
                 splitSource =
                     divert line
+
+                cleanSource =
+                    filterZMP line
             in
             case splitSource of
                 OOB infoLine ->
@@ -126,7 +138,7 @@ update msg model =
 
                 MudOutput displayLine ->
                     ( { model
-                        | ansiModel = AnsiL.update displayLine model.ansiModel
+                        | ansiModel = AnsiL.update (applyLineFilters displayLine) model.ansiModel
                       }
                     , scrollToBottom
                     )
@@ -141,11 +153,21 @@ update msg model =
 -- two different ways to unpack and search text from the mud
 
 
+
+
+applyLineFilters : String -> String
+applyLineFilters string =
+    filterZMP string
+filterZMP : String -> String
+filterZMP string =
+    String.replace "ÿ" "" string
+    -- |> Debug.log "replacing"
+
 type MudLine
     = OOB String
     | MudOutput String
 
-
+divert : String -> MudLine
 divert string =
     case isOOB string of
         True ->
@@ -184,15 +206,6 @@ isOOB line =
     String.contains "ÿ" (String.join "" data)
 
 
-stringIfNotOOB : String -> String
-stringIfNotOOB mudline =
-    case isOOB mudline of
-        True ->
-            ""
-
-        False ->
-            mudline
-
 
 
 -- coming in from JS side
@@ -205,12 +218,21 @@ subscriptions _ =
 
 playerView : AnsiL.Model -> AnsiL.Model
 playerView model =
-    { model | lines = Array.filter (\line -> not <| String.contains "ÿ" (lineToString line)) model.lines }
+    -- modify model for views
+    { model | lines = Array.filter (\line -> not <| String.contains "NAMEDiscworld" (lineToString line)) model.lines }
 
 
 type alias InfoModel =
     List String
 
+strToCodes : String -> String
+strToCodes string =
+    let chars = String.toList string
+
+    in
+    List.map (\ch -> Char.toCode ch) chars
+    |> List.map String.fromInt
+    |> String.join " "
 
 statsView : InfoModel -> Html x
 statsView model =
