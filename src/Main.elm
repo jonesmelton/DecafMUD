@@ -164,8 +164,24 @@ type alias InfoModel =
 statsView : InfoModel -> Html x
 statsView model =
     div
-        [ class "absolute bottom-64 right-0 h-256 w-64 z-30 break-words", class "bg-gray-200" ]
+        [ class "fixed bottom-64 right-0 h-256 w-64 z-30 break-words", class "bg-gray-200" ]
         [ text model ]
+
+
+inputView : Model -> Html Msg
+inputView model =
+    div [ class "fixed inset-x-0 bottom-0 h-10 bg-blue-100 p-2" ]
+        [ input
+            [ type_ "text"
+            , placeholder "Draft"
+            , onInput DraftChanged
+            , on "keydown" (ifIsEnter Send)
+            , value model.draft
+            , class "left-0"
+            ]
+            []
+        , button [ onClick Send, class "ml-4" ] [ text "Send" ]
+        ]
 
 
 view : Model -> Html Msg
@@ -175,23 +191,14 @@ view model =
             playerView model.ansiModel
 
         mudContainerClasses =
-            "container relative mx-auto bg-gray-900 pl-2"
+            "container relative mx-auto bg-gray-900 pl-2 border-double border-4 pb-16"
     in
     div
         [ class mudContainerClasses, id "mud-content" ]
         [ h1 [ class "connect-title" ] [ text "Echo Chat" ]
         , statsView "testytest"
         , div [ class "text-gray-50 break-words" ] [ AnsiL.view viewModel ]
-        , input
-            [ type_ "text"
-            , placeholder "Draft"
-            , onInput DraftChanged
-            , on "keydown" (ifIsEnter Send)
-            , value model.draft
-            , class "-ml-2"
-            ]
-            []
-        , button [ onClick Send ] [ text "Send" ]
+        , inputView model
         ]
 
 
