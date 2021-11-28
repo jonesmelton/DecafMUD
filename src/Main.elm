@@ -49,6 +49,7 @@ type alias Model =
     , inputHistory : List String
     , mudlines : List Ansi.Action
     , ansiModel : AnsiL.Model
+    , infoModel : List String
     }
 
 
@@ -58,6 +59,7 @@ init flags =
       , inputHistory = []
       , mudlines = []
       , ansiModel = AnsiL.init AnsiL.Cooked
+      , infoModel = [ "" ]
       }
     , focusInputBox
     )
@@ -91,20 +93,47 @@ update msg model =
             )
 
         Mudline line ->
-            -- Debug.log "elm logging"
-            ( { model
-                | mudlines = parse line ++ model.mudlines
-                , ansiModel = AnsiL.update (stringIfNotOOB line) model.ansiModel
-              }
-            , scrollToBottom
-            )
+            let
+                splitSource =
+                    divert line
+            in
+            case splitSource of
+                OOB infoLine ->
+                    ( { model
+                        | infoModel = infoLine :: model.infoModel
+                      }
+                    , scrollToBottom
+                    )
+
+                MudOutput displayLine ->
+                    ( { model
+                        | ansiModel = AnsiL.update displayLine model.ansiModel
+                      }
+                    , scrollToBottom
+                    )
 
         NoOp ->
             ( model, Cmd.none )
 
 
 
+-- data sent from the mud that isn't intended for direct human consumption
+-- mixed in with the mud output. the library parser doesn't catch it so
 -- two different ways to unpack and search text from the mud
+
+
+type MudLine
+    = OOB String
+    | MudOutput String
+
+
+divert string =
+    case isOOB string of
+        True ->
+            OOB string
+
+        False ->
+            MudOutput string
 
 
 unwrapPrint : Action -> String
@@ -123,7 +152,7 @@ lineToString line =
         ( chunks, _ ) =
             line
     in
-    List.map (\chunk -> chunk.text) chunks
+    List.map (\ch -> ch.text) chunks
         |> String.join ""
 
 
@@ -161,14 +190,31 @@ playerView model =
 
 
 type alias InfoModel =
-    String
+    List String
 
 
 statsView : InfoModel -> Html x
 statsView model =
+    let
+        divClass =
+            "fixed bottom-64 right-0 h-256 w-64 z-30 break-words bg-gray-200"
+
+        infoLine ln =
+            span [] [ text ln ]
+    in
     div
-        [ class "fixed bottom-64 right-0 h-256 w-64 z-30 break-words", class "bg-gray-200" ]
-        [ text model ]
+        [ class divClass ]
+        [ case model of
+            first :: rest ->
+                div []
+                    (List.map
+                        (\t -> span [] [ text t ])
+                        rest
+                    )
+
+            [] ->
+                text ""
+        ]
 
 
 inputView : Model -> Html Msg
@@ -199,7 +245,7 @@ view model =
     in
     div
         [ class mudContainerClasses, id "mud-content" ]
-        [ statsView "testytest"
+        [ statsView model.infoModel
         , div [ class "text-gray-50 break-words" ] [ AnsiL.view viewModel ]
         , inputView model
         ]
