@@ -157,6 +157,17 @@ playerView model =
     { model | lines = Array.filter (\line -> not <| String.contains "ÿ" (lineToString line)) model.lines }
 
 
+type alias InfoModel =
+    String
+
+
+statsView : InfoModel -> Html x
+statsView model =
+    div
+        [ class "container mx-auto" ]
+        [ text model ]
+
+
 view : Model -> Html Msg
 view model =
     let
