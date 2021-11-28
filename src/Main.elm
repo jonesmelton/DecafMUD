@@ -164,7 +164,7 @@ type alias InfoModel =
 statsView : InfoModel -> Html x
 statsView model =
     div
-        [ class "container mx-auto" ]
+        [ class "absolute bottom-64 right-0 h-256 w-64 z-30 break-words", class "bg-gray-200" ]
         [ text model ]
 
 
@@ -173,11 +173,14 @@ view model =
     let
         viewModel =
             playerView model.ansiModel
+
+        mudContainerClasses =
+            "container relative mx-auto bg-gray-900 pl-2"
     in
     div
-        [ class "container mx-auto bg-gray-900 pl-2", id "mud-content" ]
+        [ class mudContainerClasses, id "mud-content" ]
         [ h1 [ class "connect-title" ] [ text "Echo Chat" ]
-        , div [ class "debug" ] []
+        , statsView "testytest"
         , div [ class "text-gray-50 break-words" ] [ AnsiL.view viewModel ]
         , input
             [ type_ "text"
