@@ -16,8 +16,27 @@ import Task
 
 -- ÿ = IAC
 -- ý = DO
--- MAIN
-
+-- ù U+00F9	249
+-- ð U+00F0	240
+-- ú 00FA	250
+-- 
+-- 
+-- û
+-- É
+-- 
+strip =
+    """
+ÿð
+ÿúF
+ÿúÿð
+ÿûÉ
+ÿý'
+ÿû]
+ÿûF
+ÿý[
+ÿý
+ÿý
+"""
 
 main : Program () Model Msg
 main =
@@ -206,9 +225,9 @@ statsView model =
         [ class divClass ]
         [ case model of
             first :: rest ->
-                div []
+                ul []
                     (List.map
-                        (\t -> span [] [ text t ])
+                        (\t -> li [] [ text t ])
                         rest
                     )
 
