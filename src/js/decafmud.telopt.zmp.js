@@ -24,6 +24,8 @@
     }
 
     this.decaf.sendIAC(
+      // interpret as command, sb, zmp (parse open?), cmd, something, empty string, interpret as command, se
+      // SB and SE I have no idea
       t.IAC + t.SB + t.ZMP + cmd + out + "\x00" + t.IAC + t.SE
     );
   };

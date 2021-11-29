@@ -2,6 +2,7 @@ port module Main exposing (..)
 
 import Ansi exposing (Action(..), parse)
 import Ansi.Log as AnsiL
+import Telnet
 import Array exposing (Array)
 import Browser
 import Browser.Dom as Dom
@@ -225,14 +226,13 @@ playerView model =
 type alias InfoModel =
     List String
 
-strToCodes : String -> String
+strToCodes : String -> List Telnet.Code
 strToCodes string =
     let chars = String.toList string
 
     in
     List.map (\ch -> Char.toCode ch) chars
-    |> List.map String.fromInt
-    |> String.join " "
+    |> List.map Telnet.codeFromPoint
 
 statsView : InfoModel -> Html x
 statsView model =
@@ -242,6 +242,7 @@ statsView model =
 
         infoLine ln =
             span [] [ text ln ]
+
     in
     div
         [ class divClass ]
