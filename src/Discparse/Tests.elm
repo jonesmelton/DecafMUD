@@ -1,21 +1,29 @@
 module Discparse.Tests exposing (..)
 
-import Discparse exposing (parseDiscLine)
+import Discparse exposing (parseDiscLine, zmp)
 import Expect
 import Test as T
 
 
 all : T.Test
 all =
-    T.describe "ANSI" [ parsing ]
+    T.describe "ANSI" [ parsing, zmp ]
 
 
 parsing : T.Test
 parsing =
     T.describe "Parsing"
-        [ T.test "doesn't transform stream" <|
+        [ T.test "pulls inner value" <|
             \() ->
                 Expect.equal
-                    (parseDiscLine "toot")
-                    "toot"
+                    (parseDiscLine "jkhdafkjhfjkd[DAFDAFdlkkkIHUIJfklfj92898xvcz9438298fieruui9849389]")
+                    "[DAFDAFdlkkkIHUIJfklfj92898xvcz9438298fieruui9849389]"
+        ]
+
+
+zmp =
+    T.describe "Zmp"
+        [ T.test "finds a character" <|
+            \() ->
+                Expect.equal 1 1
         ]
