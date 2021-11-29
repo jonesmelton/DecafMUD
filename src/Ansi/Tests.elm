@@ -1,4 +1,4 @@
-module Tests exposing (all, assertWindowRendersAs, colorCode, esc, log, parsing, renderChunk, renderLine, renderWindow, styleFlags)
+module Ansi.Tests exposing (all, assertWindowRendersAs, colorCode, esc, log, parsing, renderChunk, renderLine, renderWindow, styleFlags)
 
 import Ansi
 import Ansi.Log
