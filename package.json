@@ -5,9 +5,12 @@
   "author": "Jones Melton <shavah@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "build": "rm -rf dist && swc src -d dist --copy-files",
-    "elmb": "elm make src/Main.elm --output=dist/main.js --debug",
-    "css": "tailwindcss -o dist/tailwind.css"
+    "build:decaf": "swc src -d dist --copy-files",
+    "build:elm": "elm make src/Main.elm --output=dist/main.js --debug",
+    "build:css": "tailwindcss -o dist/tailwind.css",
+    "build:most": "yarn build:decaf && yarn build:elm",
+    "build:all": "./compile.sh",
+    "test": "yarn elm-test src"
   },
   "dependencies": {
     "tailwindcss": "^2.2.19",
@@ -19,6 +22,7 @@
     "ansicolor": "^1.1.95",
     "autoprefixer": "^10.4.0",
     "chokidar": "^3.5.2",
+    "elm": "^0.19.1-5",
     "elm-test": "^0.19.1-revision7",
     "eslint-plugin-prettier": "^4.0.0",
     "parcel": "^2.0.1",
