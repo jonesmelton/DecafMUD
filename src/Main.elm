@@ -164,7 +164,6 @@ update msg model =
 
 
 
-
 applyLineFilters : String -> String
 applyLineFilters string =
     filterZMP string

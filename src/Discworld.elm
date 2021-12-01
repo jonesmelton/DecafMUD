@@ -1,5 +1,6 @@
-module Discparse exposing (parseDiscLine)
+module Discworld exposing (parseDiscLine)
 
+import Ansi exposing (parse)
 import Parser exposing (..)
 
 
@@ -7,7 +8,7 @@ parseDiscLine : String -> String
 parseDiscLine line =
     let
         res =
-            run simpleP line
+            run zmp line
     in
     case res of
         Ok val ->
@@ -19,8 +20,8 @@ parseDiscLine line =
             Debug.toString err
 
 
-simpleP : Parser String
-simpleP =
+zmp : Parser String
+zmp =
     succeed (String.append "")
         |. chompIf Char.isAlpha
         |. chompWhile Char.isAlpha
