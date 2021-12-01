@@ -2,7 +2,6 @@ port module Main exposing (..)
 
 import Ansi exposing (Action(..), parse)
 import Ansi.Log as AnsiL
-import Telnet
 import Array exposing (Array)
 import Browser
 import Browser.Dom as Dom
@@ -25,7 +24,7 @@ import Task
 -- û
 -- É
 -- 
-strip =
+whatarethose =
     """
     255 250 70
 255 250 24 1 255 240
@@ -46,6 +45,16 @@ strip =
 ÿý[
 ÿý
 ÿý
+ÿ = IAC
+ý = DO
+ù U+00F9	249
+ð U+00F0	240
+ú 00FA	250
+
+
+û
+É
+
 """
 
 main : Program () Model Msg
@@ -226,13 +235,6 @@ playerView model =
 type alias InfoModel =
     List String
 
-strToCodes : String -> List Telnet.Code
-strToCodes string =
-    let chars = String.toList string
-
-    in
-    List.map (\ch -> Char.toCode ch) chars
-    |> List.map Telnet.codeFromPoint
 
 statsView : InfoModel -> Html x
 statsView model =

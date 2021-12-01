@@ -1,25 +1,72 @@
 module Discparse exposing (parseDiscLine, zmp)
 
-import Parser as P exposing ((|.), (|=), Parser)
+import Char exposing (isAlpha)
+import Html exposing (pre)
+import Parser as P exposing (..)
 
 
+parseDiscLine : String -> String
+parseDiscLine line =
+    let
+        res =
+            run simpleP line
+    in
+    case res of
+        Ok val ->
+            val
 
--- parseDiscLine : String -> String
+        -- List.map String.fromInt [ val.res, val.reso ]
+        --     |> String.join ""
+        Err err ->
+            Debug.toString err
 
 
-deadEndsToString : List P.DeadEnd -> String
+type alias MudStream =
+    String
+
+
+type alias PResult =
+    { res : Int, reso : Int }
+
+
+simpleP : Parser String
+simpleP =
+    succeed (String.append "")
+        |. chompIf Char.isAlpha
+        |. chompWhile Char.isAlpha
+        |. symbol "["
+        |= getChompedString (chompUntil "]")
+
+
+zmpData : Parser String
+zmpData =
+    getChompedString <|
+        succeed ()
+            |. zmp
+            |. end
+
+
+zmp : Parser String
+zmp =
+    succeed identity
+        |. symbol "["
+        |= (getChompedString <| chompUntilEndOr "]")
+        |. end
+
+
+deadEndsToString : List DeadEnd -> String
 deadEndsToString deadends =
     let
         pToString p =
             case p of
-                P.Expecting expecting ->
+                Expecting expecting ->
                     expecting
 
-                P.ExpectingSymbol sym ->
+                ExpectingSymbol sym ->
                     sym
 
-                P.Problem str ->
-                    str
+                ExpectingInt ->
+                    "expecting int"
 
                 _ ->
                     "something else"
@@ -27,23 +74,3 @@ deadEndsToString deadends =
     List.map .problem deadends
         |> List.map pToString
         |> String.join ""
-
-
-parseDiscLine line =
-    let
-        res =
-            P.run zmp line
-    in
-    case res of
-        Ok val ->
-            val
-
-        Err err ->
-            deadEndsToString err
-
-
-zmp =
-    P.getChompedString <|
-        P.succeed identity
-            |. P.symbol "["
-            |= P.chompUntil "]"

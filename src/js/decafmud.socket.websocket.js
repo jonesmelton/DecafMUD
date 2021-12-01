@@ -167,6 +167,8 @@
    * @event */
   DecafWebSocket.onOpen = function () {
     var sock = DecafWebSocket.sockets[this];
+    // um attach to send input event on
+    // the global window obv
     window.elmToMud.subscribe((msg) => sock.write(msg + "\r\n"));
     // Are we connected?
     if (this.readyState === 1) {
@@ -200,6 +202,7 @@
   DecafWebSocket.onMessage = function (event) {
     var sock = DecafWebSocket.sockets[this];
     var u8 = new Uint8Array(event.data);
+    sock.decaf.pipe.mudStreamRaw(event.data);
     rq = "";
     for (var i = 0; i < u8.length; i++) {
       rq += String.fromCharCode(u8[i]);

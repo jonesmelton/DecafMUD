@@ -7,23 +7,15 @@ import Test as T
 
 all : T.Test
 all =
-    T.describe "ANSI" [ parsing, zmp ]
+    T.describe "EVERYTHING" [ parsing ]
 
 
 parsing : T.Test
 parsing =
     T.describe "Parsing"
-        [ T.test "pulls inner value" <|
+        [ T.test "basic basic" <|
             \() ->
                 Expect.equal
-                    (parseDiscLine "jkhdafkjhfjkd[DAFDAFdlkkkIHUIJfklfj92898xvcz9438298fieruui9849389]")
-                    "[DAFDAFdlkkkIHUIJfklfj92898xvcz9438298fieruui9849389]"
-        ]
-
-
-zmp =
-    T.describe "Zmp"
-        [ T.test "finds a character" <|
-            \() ->
-                Expect.equal 1 1
+                    (parseDiscLine "kljdafk[kafdafdaf]adfdf")
+                    "kafdafdaf"
         ]
