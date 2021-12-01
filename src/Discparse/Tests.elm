@@ -1,6 +1,6 @@
 module Discparse.Tests exposing (..)
 
-import Discparse exposing (parseDiscLine, zmp)
+import Discparse exposing (parseDiscLine)
 import Expect
 import Test as T
 

@@ -1,8 +1,6 @@
-module Discparse exposing (parseDiscLine, zmp)
+module Discparse exposing (parseDiscLine)
 
-import Char exposing (isAlpha)
-import Html exposing (pre)
-import Parser as P exposing (..)
+import Parser exposing (..)
 
 
 parseDiscLine : String -> String
@@ -21,14 +19,6 @@ parseDiscLine line =
             Debug.toString err
 
 
-type alias MudStream =
-    String
-
-
-type alias PResult =
-    { res : Int, reso : Int }
-
-
 simpleP : Parser String
 simpleP =
     succeed (String.append "")
@@ -36,22 +26,6 @@ simpleP =
         |. chompWhile Char.isAlpha
         |. symbol "["
         |= getChompedString (chompUntil "]")
-
-
-zmpData : Parser String
-zmpData =
-    getChompedString <|
-        succeed ()
-            |. zmp
-            |. end
-
-
-zmp : Parser String
-zmp =
-    succeed identity
-        |. symbol "["
-        |= (getChompedString <| chompUntilEndOr "]")
-        |. end
 
 
 deadEndsToString : List DeadEnd -> String

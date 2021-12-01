@@ -202,7 +202,7 @@
   DecafWebSocket.onMessage = function (event) {
     var sock = DecafWebSocket.sockets[this];
     var u8 = new Uint8Array(event.data);
-    sock.decaf.pipe.mudStreamRaw(event.data);
+    // sock.decaf.pipe.mudStreamRaw(event.data);
     rq = "";
     for (var i = 0; i < u8.length; i++) {
       rq += String.fromCharCode(u8[i]);
