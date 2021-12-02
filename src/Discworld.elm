@@ -45,8 +45,8 @@ zmp : Parser String
 zmp =
     succeed (String.append "")
         |. chompWhile (\c -> Char.isAlphaNum c)
-        |. symbol "["
-        |= getChompedString (chompUntil "]")
+        |. chompIf (\c -> c == 'ÿ')
+        |= getChompedString (chompUntil "ÿ")
 
 
 deadEndToString : DeadEnd -> String

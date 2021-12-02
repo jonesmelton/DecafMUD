@@ -20,13 +20,13 @@ parsing =
         [ T.test "pulls string from between parens" <|
             \() ->
                 Expect.equal
-                    (parseDiscLine "kljdafk[kafdafdaf]adfdf")
+                    (parseDiscLine "kljdafkÿkafdafdafÿadfdf")
                     "kafdafdaf"
         , T.test "splits zmp data from stream" <|
             \() ->
                 Expect.equal
-                    (mudData "kljdafk[kafdafdaf]adfdf")
-                    ( "kljdafk[kafdafdaf]adfdf", "kafdafdaf" )
+                    (mudData "kljdafkÿkafdafdafÿadfdf")
+                    ( "kljdafkÿkafdafdafÿadfdf", "kafdafdaf" )
 
         -- , T.test "handles data"
         ]
