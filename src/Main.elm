@@ -5,12 +5,14 @@ import Ansi.Log as AnsiL
 import Array exposing (Array)
 import Browser
 import Browser.Dom as Dom
+import Discworld as DW
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import Json.Decode as D
 import Scroll exposing (scrollY)
 import Task
+import Discworld exposing (mudData)
 
 
 
@@ -102,8 +104,6 @@ init flags =
     , focusInputBox
     )
 
-
-
 -- UPDATE
 
 
@@ -133,22 +133,14 @@ update msg model =
         Mudline line ->
             let
                 splitSource =
-                    divert line
+                    mudData line
 
-                cleanSource =
-                    filterZMP line
             in
             case splitSource of
-                OOB infoLine ->
+                (stream, data) ->
                     ( { model
-                        | infoModel = infoLine :: model.infoModel
-                      }
-                    , scrollToBottom
-                    )
-
-                MudOutput displayLine ->
-                    ( { model
-                        | ansiModel = AnsiL.update (applyLineFilters displayLine) model.ansiModel
+                        | infoModel = data :: model.infoModel
+                        , ansiModel = AnsiL.update stream model.ansiModel
                       }
                     , scrollToBottom
                     )
@@ -228,7 +220,8 @@ subscriptions _ =
 playerView : AnsiL.Model -> AnsiL.Model
 playerView model =
     -- modify model for views
-    { model | lines = Array.filter (\line -> not <| String.contains "NAMEDiscworld" (lineToString line)) model.lines }
+    -- { model | lines = Array.filter (\line -> not <| String.contains "NAMEDiscworld" (lineToString line)) model.lines }
+    model
 
 
 type alias InfoModel =

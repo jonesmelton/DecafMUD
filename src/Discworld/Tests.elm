@@ -1,6 +1,10 @@
 module Discworld.Tests exposing (..)
 
-import Discworld exposing (parseDiscLine)
+import Discworld
+    exposing
+        ( mudData
+        , parseDiscLine
+        )
 import Expect
 import Test as T
 
@@ -18,9 +22,11 @@ parsing =
                 Expect.equal
                     (parseDiscLine "kljdafk[kafdafdaf]adfdf")
                     "kafdafdaf"
-        , T.test "changes to input when there is no match" <|
+        , T.test "splits zmp data from stream" <|
             \() ->
                 Expect.equal
-                    (parseDiscLine "uuiuyuiklmknmnnmnr")
-                    "uuiuyuiklmknmnnmnr"
+                    (mudData "kljdafk[kafdafdaf]adfdf")
+                    ( "kljdafk[kafdafdaf]adfdf", "kafdafdaf" )
+
+        -- , T.test "handles data"
         ]
