@@ -93,16 +93,6 @@ stringToCodes string =
         |> String.join ""
 
 
-zmp2 : Parser String
-zmp2 =
-    succeed (String.append "")
-        |. chompIf Char.isAlphaNum
-        |. chompWhile Char.isAlphaNum
-        |. token "ÿú"
-        |. chompIf Char.isAlphaNum
-        |= getChompedString (chompUntilEndOr "ÿð")
-
-
 gmcp : Parser String
 gmcp =
     -- ÿúÿðÿú
@@ -112,29 +102,27 @@ gmcp =
     succeed (String.append "")
         |. ascii
         |. chompIf (code 255)
-        |. anything
+        |. anythingButIAC
         |. chompIf (code 255)
-        |. anything
+        |. anythingButIAC
         |. chompIf (code 255)
         |. chompIf (code 250)
-        |= anything
+        |= anythingButIAC
         |. chompIf (code 255)
         |. getChompedString (chompUntilEndOr "\\")
+
+
+anythingButIAC : Parser String
+anythingButIAC =
+    succeed (String.append "")
+        |= (getChompedString <| chompWhile (\c -> Char.toCode c /= 255))
 
 
 anything : Parser String
 anything =
     succeed (String.append "")
-        |= (getChompedString <| chompWhile (\c -> Char.toCode c /= 255))
+        |= (getChompedString <| chompWhile (\_ -> True))
         |> andThen (\chr -> succeed (stringToCodes chr))
-
-
-zmp : Parser String
-zmp =
-    succeed (String.append "")
-        |. chompWhile (\c -> Char.isAlphaNum c)
-        |. chompIf (\c -> c == 'ÿ')
-        |= getChompedString (chompUntil "ÿ")
 
 
 isAsciiChar : Char -> Bool
