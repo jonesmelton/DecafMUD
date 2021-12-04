@@ -1,15 +1,15 @@
-module Discworld exposing (filterZmp, mudData, parseDiscLine)
+module Discworld exposing (filterGmcp, mudData, parseDiscLine)
 
 import Ansi
 import Html as H
 import Parser exposing (..)
 
 
-filterZmp : String -> String
-filterZmp line =
+filterGmcp : String -> String
+filterGmcp line =
     let
         res =
-            run zmp3 line
+            run gmcp line
     in
     case res of
         Ok val ->
@@ -103,25 +103,29 @@ zmp2 =
         |= getChompedString (chompUntilEndOr "ÿð")
 
 
-zmp3 : Parser String
-zmp3 =
+gmcp : Parser String
+gmcp =
+    -- ÿúÿðÿú
+    -- IAC 201 240
+    -- 255 201 240                                       255 240 ???
+    -- IAC SB GMCP '<package.subpackage.command>' <data> IAC SE format
     succeed (String.append "")
         |. ascii
         |. chompIf (code 255)
+        |. anything
+        |. chompIf (code 255)
+        |. anything
+        |. chompIf (code 255)
         |. chompIf (code 250)
-        |= getChompedString (chompUntilEndOr "\\")
-
-
-
--- |. chompIf (code 255)
--- |. anything
--- |. end
+        |= anything
+        |. chompIf (code 255)
+        |. getChompedString (chompUntilEndOr "\\")
 
 
 anything : Parser String
 anything =
     succeed (String.append "")
-        |= (getChompedString <| chompWhile (\c -> True))
+        |= (getChompedString <| chompWhile (\c -> Char.toCode c /= 255))
         |> andThen (\chr -> succeed (stringToCodes chr))
 
 
