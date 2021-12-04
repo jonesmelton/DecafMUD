@@ -3,7 +3,7 @@ module Discworld.Tests exposing (..)
 import Discworld
     exposing
         ( mudData
-        , parseDiscLine
+        , applyTelnetAnnotations
         , filterGmcp
         )
 import Expect
@@ -21,7 +21,7 @@ parsing =
         [ T.test "annotate command strings with numbers" <|
             \() ->
                 Expect.equal
-                    (parseDiscLine "kfkÿkaafÿadfdf")
+                    (applyTelnetAnnotations "kfkÿkaafÿadfdf")
                     "kfkÿ:  255 kaafÿ:  255 adfdf"
 
         , T.test "handles real one" <|

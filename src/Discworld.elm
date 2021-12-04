@@ -1,47 +1,43 @@
-module Discworld exposing (filterGmcp, mudData, parseDiscLine)
+module Discworld exposing (applyTelnetAnnotations, filterGmcp, mudData)
 
 import Ansi
 import Html as H
 import Parser exposing (..)
 
 
+applyParser : Parser String -> String -> String
+applyParser parser input =
+    let
+        res =
+            run parser input
+    in
+    case res of
+        Ok val ->
+            val
+
+        Err err ->
+            deadEndsToString err
+
+
 filterGmcp : String -> String
 filterGmcp line =
-    let
-        res =
-            run gmcp line
-    in
-    case res of
-        Ok val ->
-            val
-
-        Err err ->
-            deadEndsToString err
+    applyParser gmcp line
 
 
-parseDiscLine : String -> String
-parseDiscLine line =
-    let
-        res =
-            run anything line
-    in
-    case res of
-        Ok val ->
-            val
-
-        Err err ->
-            deadEndsToString err
+applyTelnetAnnotations : String -> String
+applyTelnetAnnotations line =
+    applyParser anything line
 
 
 mudData : String -> ( String, String )
 mudData line =
-    ( parseDiscLine line, "" )
+    ( applyTelnetAnnotations line, "" )
 
 
 n_mudData ln =
     let
         zmpData =
-            parseDiscLine ln
+            applyTelnetAnnotations ln
 
         cleanLine =
             String.replace zmpData ""
