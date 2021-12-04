@@ -3,6 +3,7 @@ module Discworld exposing (applyTelnetAnnotations, filterGmcp, mudData)
 import Ansi
 import Html as H
 import Parser exposing (..)
+import Telnet
 
 
 applyParser : Parser String -> String -> String
@@ -19,9 +20,16 @@ applyParser parser input =
             deadEndsToString err
 
 
-filterGmcp : String -> String
+filterGmcp : String -> ( String, String )
 filterGmcp line =
-    applyParser gmcp line
+    let
+        zmpData =
+            applyParser gmcp line
+
+        cleanLine =
+            String.replace zmpData ""
+    in
+    ( applyTelnetAnnotations <| cleanLine line, zmpData )
 
 
 applyTelnetAnnotations : String -> String
@@ -32,17 +40,6 @@ applyTelnetAnnotations line =
 mudData : String -> ( String, String )
 mudData line =
     ( applyTelnetAnnotations line, "" )
-
-
-n_mudData ln =
-    let
-        zmpData =
-            applyTelnetAnnotations ln
-
-        cleanLine =
-            String.replace zmpData ""
-    in
-    ( cleanLine ln, zmpData )
 
 
 deadEndsToHtml : List DeadEnd -> H.Html x
@@ -76,12 +73,9 @@ stringToCodes string =
                 String.fromChar char
 
             else
-                String.fromChar char
-                    ++ ": "
-                    ++ (Char.toCode char
-                            |> String.fromInt
-                            |> String.pad 5 ' '
-                       )
+                Char.toCode char
+                    |> Telnet.toString
+                    |> (\ccode -> "[" ++ ccode ++ "]")
     in
     string
         |> String.toList
