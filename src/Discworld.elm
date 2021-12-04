@@ -1,8 +1,22 @@
-module Discworld exposing (mudData, parseDiscLine)
+module Discworld exposing (filterZmp, mudData, parseDiscLine)
 
-import Ansi exposing (parse)
+import Ansi
 import Html as H
 import Parser exposing (..)
+
+
+filterZmp : String -> String
+filterZmp line =
+    let
+        res =
+            run zmp3 line
+    in
+    case res of
+        Ok val ->
+            val
+
+        Err err ->
+            deadEndsToString err
 
 
 parseDiscLine : String -> String
@@ -20,8 +34,19 @@ parseDiscLine line =
 
 
 mudData : String -> ( String, String )
-mudData ln =
-    ( ln, parseDiscLine ln )
+mudData line =
+    ( parseDiscLine line, "" )
+
+
+n_mudData ln =
+    let
+        zmpData =
+            parseDiscLine ln
+
+        cleanLine =
+            String.replace zmpData ""
+    in
+    ( cleanLine ln, zmpData )
 
 
 deadEndsToHtml : List DeadEnd -> H.Html x
@@ -51,7 +76,7 @@ stringToCodes string =
     let
         legalChar : Char -> String
         legalChar char =
-            if Char.toCode char <= 127 then
+            if isAsciiChar char then
                 String.fromChar char
 
             else
@@ -78,6 +103,21 @@ zmp2 =
         |= getChompedString (chompUntilEndOr "ÿð")
 
 
+zmp3 : Parser String
+zmp3 =
+    succeed (String.append "")
+        |. ascii
+        |. chompIf (code 255)
+        |. chompIf (code 250)
+        |= getChompedString (chompUntilEndOr "\\")
+
+
+
+-- |. chompIf (code 255)
+-- |. anything
+-- |. end
+
+
 anything : Parser String
 anything =
     succeed (String.append "")
@@ -91,6 +131,35 @@ zmp =
         |. chompWhile (\c -> Char.isAlphaNum c)
         |. chompIf (\c -> c == 'ÿ')
         |= getChompedString (chompUntil "ÿ")
+
+
+isAsciiChar : Char -> Bool
+isAsciiChar char =
+    let
+        charCode =
+            Char.toCode char
+    in
+    charCode < 128
+
+
+isNotAsciiChar : Char -> Bool
+isNotAsciiChar =
+    not << isAsciiChar
+
+
+
+-- code : Int -> (Char -> Parser Char)
+
+
+code : Int -> (Char -> Bool)
+code cd =
+    \c -> Char.toCode c == cd
+
+
+ascii : Parser String
+ascii =
+    succeed (String.append "")
+        |= getChompedString (chompWhile isAsciiChar)
 
 
 
