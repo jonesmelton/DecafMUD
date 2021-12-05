@@ -132,7 +132,7 @@ update msg model =
         Mudline line ->
             let
                 splitSource =
-                    mudData line
+                    DW.mudData line
 
             in
             case splitSource of
