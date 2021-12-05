@@ -2,10 +2,10 @@ port module Main exposing (..)
 
 import Ansi exposing (Action(..), parse)
 import Ansi.Log as AnsiL
-import Array exposing (Array)
 import Browser
 import Browser.Dom as Dom
-import DiscworldParse as DW
+import Discworld as DW
+import Discworld.Parse exposing (mudData)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
@@ -22,11 +22,6 @@ main =
         , update = update
         , subscriptions = subscriptions
         }
-
-
-
--- PORTS
--- connection out to JS
 
 
 port sendToMud : String -> Cmd msg
@@ -60,10 +55,6 @@ init flags =
     )
 
 
-
--- UPDATE
-
-
 type Msg
     = DraftChanged String
     | Mudline String
@@ -90,7 +81,7 @@ update msg model =
         Mudline line ->
             let
                 splitSource =
-                    DW.mudData line
+                    mudData line
             in
             case splitSource of
                 ( stream, data ) ->

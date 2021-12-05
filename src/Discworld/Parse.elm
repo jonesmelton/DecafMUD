@@ -1,4 +1,4 @@
-module DiscworldParse exposing (applyTelnetAnnotations, filterGmcp, mudData)
+module Discworld.Parse exposing (applyTelnetAnnotations, mudData)
 
 import Html as H
 import Parser exposing (..)
@@ -19,26 +19,19 @@ applyParser parser input =
             deadEndsToString err
 
 
-filterGmcp : String -> ( String, String )
-filterGmcp line =
-    let
-        zmpData =
-            applyParser gmcp line
-
-        cleanLine =
-            String.replace zmpData ""
-    in
-    ( applyTelnetAnnotations <| cleanLine line, zmpData )
-
-
 applyTelnetAnnotations : String -> String
 applyTelnetAnnotations line =
     applyParser anything line
 
 
+takeGmcpData : String -> String
+takeGmcpData line =
+    applyParser gmcp line
+
+
 mudData : String -> ( String, String )
-mudData =
-    filterGmcp
+mudData line =
+    ( applyTelnetAnnotations line, takeGmcpData line )
 
 
 deadEndsToHtml : List DeadEnd -> H.Html x
@@ -90,28 +83,22 @@ gmcp =
     -- 255 201 240                                       255 240 ???
     -- IAC SB GMCP '<package.subpackage.command>' <data> IAC SE format
     succeed (String.append "")
-        |= anything
-
-
-
--- |. token "NAME"
--- |= anything
--- |. ascii
--- |. spaces
--- |. ascii
--- |. symbol ":"
--- |. spaces
--- |. chompIf (code 255)
--- |. chompIf (code 250)
--- |. chompIf (code 69)
--- |. chompIf (code 1)
--- |. chompIf (code 255)
--- |. chompIf (code 240)
--- |. chompIf (code 255)
--- |. chompIf (code 250)
--- |= anythingButIAC
--- |. chompIf (code 255)
--- |. getChompedString (chompUntilEndOr "\\")
+        |. ascii
+        |. spaces
+        |. ascii
+        |. symbol ":"
+        |. spaces
+        |. chompIf (code 255)
+        |. chompIf (code 250)
+        |. chompIf (code 24)
+        |. chompIf (code 1)
+        |. chompIf (code 255)
+        |. chompIf (code 240)
+        |. chompIf (\c -> c == 'F')
+        |. chompIf (code 1)
+        |= anythingButIAC
+        |. chompIf (code 255)
+        |. chompIf (code 240)
 
 
 anythingButIAC : Parser String
@@ -133,16 +120,15 @@ isAsciiChar char =
         charCode =
             Char.toCode char
     in
-    charCode < 128
+    -- under 32 is control stuff, above 127 is characters that telnet only uses for protocol
+    -- 10 is line feed; 13 is carriage return
+    -- 27 is ANSI escape. it would be better to strip it here but that breaks the formatting
+    (charCode > 31 && charCode < 128) || charCode == 10 || charCode == 13 || charCode == 27
 
 
 isNotAsciiChar : Char -> Bool
 isNotAsciiChar =
     not << isAsciiChar
-
-
-
--- code : Int -> (Char -> Parser Char)
 
 
 code : Int -> (Char -> Bool)
@@ -196,7 +182,11 @@ deadEndToString deadEnd =
             "ExpectingVariable at " ++ position
 
         ExpectingSymbol str ->
-            "ExpectingSymbol " ++ str ++ " at " ++ position
+            if deadEnd.row == 1 && deadEnd.col == 1 then
+                ""
+
+            else
+                "ExpectingSymbol " ++ str ++ " at " ++ position
 
         ExpectingKeyword str ->
             "ExpectingKeyword " ++ str ++ "at " ++ position
