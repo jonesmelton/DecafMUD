@@ -14,50 +14,6 @@ import Scroll exposing (scrollY)
 import Task
 
 
-
--- ÿ = IAC
--- ý = DO
--- ù U+00F9	249
--- ð U+00F0	240
--- ú 00FA	250
--- 
--- 
--- û
--- É
--- 
-whatarethose =
-    """
-    255 250 70
-255 250 24 1 255 240
-255 251 201
-255 253 39
-255 251 93
-255 251 70
-255 253 91
-255 253 31
-255 253 24
-ÿð
-ÿúF
-ÿúÿð
-ÿûÉ
-ÿý'
-ÿû]
-ÿûF
-ÿý[
-ÿý
-ÿý
-ÿ = IAC
-ý = DO
-ù U+00F9	249
-ð U+00F0	240
-ú 00FA	250
-
-
-û
-É
-
-"""
-
 main : Program () Model Msg
 main =
     Browser.element
@@ -103,6 +59,8 @@ init flags =
     , focusInputBox
     )
 
+
+
 -- UPDATE
 
 
@@ -133,10 +91,9 @@ update msg model =
             let
                 splitSource =
                     DW.mudData line
-
             in
             case splitSource of
-                (stream, data) ->
+                ( stream, data ) ->
                     ( { model
                         | infoModel = data :: model.infoModel
                         , ansiModel = AnsiL.update stream model.ansiModel
@@ -154,18 +111,24 @@ update msg model =
 -- two different ways to unpack and search text from the mud
 
 
-
 applyLineFilters : String -> String
 applyLineFilters string =
     filterZMP string
+
+
 filterZMP : String -> String
 filterZMP string =
     String.replace "ÿ" "" string
-    -- |> Debug.log "replacing"
+
+
+
+-- |> Debug.log "replacing"
+
 
 type MudLine
     = OOB String
     | MudOutput String
+
 
 divert : String -> MudLine
 divert string =
@@ -207,7 +170,6 @@ isOOB line =
 
 
 
-
 -- coming in from JS side
 
 
@@ -235,7 +197,6 @@ statsView model =
 
         infoLine ln =
             span [] [ text ln ]
-
     in
     div
         [ class divClass ]
