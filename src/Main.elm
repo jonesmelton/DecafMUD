@@ -5,7 +5,6 @@ import Ansi.Log as AnsiL
 import Browser
 import Browser.Dom as Dom
 import Discworld as DW
-import Discworld.Parse exposing (mudData)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
@@ -81,7 +80,7 @@ update msg model =
         Mudline line ->
             let
                 splitSource =
-                    mudData line
+                    ( line, "" )
             in
             case splitSource of
                 ( stream, data ) ->
@@ -94,70 +93,6 @@ update msg model =
 
         NoOp ->
             ( model, Cmd.none )
-
-
-
--- data sent from the mud that isn't intended for direct human consumption
--- mixed in with the mud output. the library parser doesn't catch it so
--- two different ways to unpack and search text from the mud
-
-
-applyLineFilters : String -> String
-applyLineFilters string =
-    filterZMP string
-
-
-filterZMP : String -> String
-filterZMP string =
-    String.replace "ÿ" "" string
-
-
-
--- |> Debug.log "replacing"
-
-
-type MudLine
-    = OOB String
-    | MudOutput String
-
-
-divert : String -> MudLine
-divert string =
-    case isOOB string of
-        True ->
-            OOB string
-
-        False ->
-            MudOutput string
-
-
-unwrapPrint : Action -> String
-unwrapPrint action =
-    case action of
-        Print value ->
-            value
-
-        _ ->
-            ""
-
-
-lineToString : AnsiL.Line -> String
-lineToString line =
-    let
-        ( chunks, _ ) =
-            line
-    in
-    List.map (\ch -> ch.text) chunks
-        |> String.join ""
-
-
-isOOB : String -> Bool
-isOOB line =
-    let
-        data =
-            List.map unwrapPrint (parse line)
-    in
-    String.contains "ÿ" (String.join "" data)
 
 
 
