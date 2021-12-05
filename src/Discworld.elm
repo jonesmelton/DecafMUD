@@ -38,8 +38,8 @@ applyTelnetAnnotations line =
 
 
 mudData : String -> ( String, String )
-mudData line =
-    ( applyTelnetAnnotations line, "" )
+mudData =
+    filterGmcp
 
 
 deadEndsToHtml : List DeadEnd -> H.Html x
@@ -85,21 +85,34 @@ stringToCodes string =
 
 gmcp : Parser String
 gmcp =
+    -- [IAC][SB][IAC][SE][IAC][SB]FNAMED
     -- ÿúÿðÿú
     -- IAC 201 240
     -- 255 201 240                                       255 240 ???
     -- IAC SB GMCP '<package.subpackage.command>' <data> IAC SE format
     succeed (String.append "")
-        |. ascii
-        |. chompIf (code 255)
-        |. anythingButIAC
-        |. chompIf (code 255)
-        |. anythingButIAC
-        |. chompIf (code 255)
-        |. chompIf (code 250)
-        |= anythingButIAC
-        |. chompIf (code 255)
-        |. getChompedString (chompUntilEndOr "\\")
+        |= anything
+
+
+
+-- |. token "NAME"
+-- |= anything
+-- |. ascii
+-- |. spaces
+-- |. ascii
+-- |. symbol ":"
+-- |. spaces
+-- |. chompIf (code 255)
+-- |. chompIf (code 250)
+-- |. chompIf (code 69)
+-- |. chompIf (code 1)
+-- |. chompIf (code 255)
+-- |. chompIf (code 240)
+-- |. chompIf (code 255)
+-- |. chompIf (code 250)
+-- |= anythingButIAC
+-- |. chompIf (code 255)
+-- |. getChompedString (chompUntilEndOr "\\")
 
 
 anythingButIAC : Parser String
