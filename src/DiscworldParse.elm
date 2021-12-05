@@ -1,6 +1,5 @@
-module Discworld exposing (applyTelnetAnnotations, filterGmcp, mudData)
+module DiscworldParse exposing (applyTelnetAnnotations, filterGmcp, mudData)
 
-import Ansi
 import Html as H
 import Parser exposing (..)
 import Telnet

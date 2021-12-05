@@ -5,14 +5,13 @@ import Ansi.Log as AnsiL
 import Array exposing (Array)
 import Browser
 import Browser.Dom as Dom
-import Discworld as DW
+import DiscworldParse as DW
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import Json.Decode as D
 import Scroll exposing (scrollY)
 import Task
-import Discworld exposing (mudData)
 
 
 
